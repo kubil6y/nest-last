@@ -18,11 +18,10 @@ import { AuthModule } from './auth/auth.module';
         PORT: Joi.number(),
       }),
     }),
-    UserModule,
     DatabaseModule,
+    UserModule,
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [],
 })
 export class AppModule {}
