@@ -14,8 +14,8 @@ export class UserService {
     return this.userRepository.find();
   }
 
-  async findOne(condition: any): Promise<User> {
-    return this.userRepository.findOne(condition);
+  async findOne(by: any): Promise<User> {
+    return this.userRepository.findOne(by);
   }
 
   async create(registerDto: RegisterDTO): Promise<User> {
