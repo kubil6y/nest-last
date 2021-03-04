@@ -9,7 +9,6 @@ import {
   InternalServerErrorException,
   NotFoundException,
   Post,
-  Req,
   Res,
   UseGuards,
   UseInterceptors,
@@ -18,7 +17,7 @@ import { UserService } from '../user/user.service';
 import { RegisterDTO } from './dtos/register.dto';
 import { LoginDTO } from './dtos/login.dto';
 import { JwtService } from '@nestjs/jwt';
-import { Response, Request } from 'express';
+import { Response } from 'express';
 import { User } from '../user/entities/user.entity';
 import { JwtPayload } from './types/jwt-payload.interface';
 import { AuthGuard } from '@nestjs/passport';
@@ -32,7 +31,7 @@ export class AuthController {
     private jwtService: JwtService,
   ) {}
 
-  @Post('register')
+  @Post('/register')
   async register(@Body() registerDto: RegisterDTO): Promise<User> {
     if (registerDto.password !== registerDto.passwordConfirm) {
       throw new BadRequestException('Passwords do not match');
@@ -48,7 +47,7 @@ export class AuthController {
     }
   }
 
-  @Post('login')
+  @Post('/login')
   async login(
     @Body() loginDto: LoginDTO,
     @Res({ passthrough: true }) res: Response,
@@ -69,13 +68,16 @@ export class AuthController {
   }
 
   @UseGuards(AuthGuard())
-  @Post('logout')
+  @Post('/logout')
   async logout(@Res({ passthrough: true }) res: Response) {
     res.clearCookie('jwt');
+    return {
+      message: 'Success',
+    };
   }
 
   @UseGuards(AuthGuard())
-  @Get('me')
+  @Get('/me')
   async me(@GetUser() user: User) {
     console.log(user);
     return user;

@@ -23,9 +23,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: JwtPayload) {
+    //at this point jwt is already verified.
+    //whatever we return will be injected to req.user (user is the default value)
     const { id } = payload;
 
-    //at this point jwt is already verified.
     const user = await this.userService.findOne({ id });
     if (!user) throw new UnauthorizedException();
 

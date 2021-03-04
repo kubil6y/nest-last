@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { UserModule } from './user/user.module';
 import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './auth/auth.module';
+import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { AuthModule } from './auth/auth.module';
     DatabaseModule,
     UserModule,
     AuthModule,
+    CommonModule,
   ],
   controllers: [AppController],
 })
