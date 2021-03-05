@@ -19,27 +19,28 @@ import { UserCreateDTO } from './dtos/user-create.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { UserUpdateDTO } from './dtos/user-update.dto';
 
-@UseInterceptors(ClassSerializerInterceptor)
 //@UseGuards(AuthGuard())
+@UseInterceptors(ClassSerializerInterceptor)
 @Controller('users')
 export class UserController {
   constructor(private userService: UserService) {}
 
   @Get()
-  all(
-    @Query('page') page: number,
-    @Query('take') take: number,
-  ): Promise<User[]> {
-    if (page < 0 || take < 0) throw new BadRequestException('are you dumb?');
-    return this.userService.paginate(page, take);
+  findAll(@Query('page') page: number): Promise<User[]> {
+    if (page < 0) throw new BadRequestException('are you dumb?');
+    return this.userService.paginate(page);
   }
 
   @Post()
   async create(@Body() body: UserCreateDTO): Promise<User> {
+    const { roleId, ...data } = body;
     const hashed = await argon2.hash('1234');
     return this.userService.create({
-      ...body,
+      ...data,
       password: hashed,
+      role: {
+        id: roleId,
+      },
     });
   }
 
@@ -53,7 +54,13 @@ export class UserController {
     @Param('id') id: number,
     @Body() userUpdate: UserUpdateDTO,
   ): Promise<any> {
-    return this.userService.update(id, userUpdate);
+    const { roleId, ...data } = userUpdate;
+    return this.userService.update(id, {
+      ...data,
+      role: {
+        id: roleId,
+      },
+    });
   }
 
   @Delete('/:id')

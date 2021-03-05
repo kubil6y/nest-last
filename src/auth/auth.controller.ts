@@ -38,7 +38,10 @@ export class AuthController {
     }
     registerDto.password = await argon2.hash(registerDto.password);
     try {
-      return await this.userService.create(registerDto);
+      return await this.userService.create({
+        ...registerDto,
+        role: { id: 5 },
+      });
     } catch (error) {
       if (error.code === '23505') {
         throw new ConflictException('Email already exists');
