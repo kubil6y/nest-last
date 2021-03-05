@@ -34,3 +34,9 @@ import { PermissionModule } from './permission/permission.module';
   controllers: [AppController],
 })
 export class AppModule {}
+
+/*
+const randomString = [...Array(32)]
+  .map(() => Math.round(Math.random() * 16).toString(16))
+  .join('');
+*/
